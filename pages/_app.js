@@ -1,10 +1,11 @@
-import { useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import "tailwindcss/tailwind.css";
 import { SlotContext } from "../utils/context";
-import { slots } from "../utils/slots";
+import { getSlots, initSlot } from "../utils/slots";
 import Layout from "../components/Layout";
+import { useRouter } from "next/router";
 
-function reducer(state, action) {
+function reducer(state, action, router) {
   console.log(action);
   switch (action.type) {
     case "UPDATE":
@@ -15,15 +16,24 @@ function reducer(state, action) {
           } else return elem;
         }),
       };
+    case "CLEAR":
+      return {
+        slots: initSlot,
+      };
     default:
       return state;
   }
 }
 
 function MyApp({ Component, pageProps }) {
-  const [state, dispatch] = useReducer(reducer, {
-    slots: slots,
+  const router = useRouter();
+  const [state, dispatch] = useReducer((...args) => reducer(...args, router), {
+    slots: getSlots(router),
   });
+
+  useEffect(() => {
+    localStorage.setItem("slots", JSON.stringify(state.slots));
+  }, [router.asPath]);
 
   return (
     <Layout>

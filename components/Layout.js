@@ -32,7 +32,7 @@ export default function Layout({ children }) {
             Crafted by:
           </h3>
           <a
-            className="text-lg font-semibold transform-gpu duration-200 text-blue-500 md:text-xl hover:text-blue-600"
+            className="text-lg font-semibold transform-gpu duration-200 text-blue-600 md:text-xl hover:text-blue-700"
             href="https://vkcodes.vercel.app"
             rel="noreferrer"
             target="_blank"

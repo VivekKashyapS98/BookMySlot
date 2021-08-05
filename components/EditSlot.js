@@ -4,6 +4,7 @@ import { SlotContext } from "../utils/context";
 export default function EditSlot(props) {
   const { state, dispatch } = useContext(SlotContext);
   const [slot, setSlot] = useState(state.slots[props.id]);
+  const [error, setError] = useState(false);
 
   const handleChange = (e) => {
     setSlot((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -12,55 +13,54 @@ export default function EditSlot(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (slot.firstName !== "" && slot.lastName !== "" && slot.phNo !== "") {
-      dispatch({ type: "UPDATE", payload: slot });
+      dispatch({ type: "UPDATE", payload: { ...slot, booked: true } });
+      props.router.push("/");
+    } else {
+      setError(true);
     }
   };
   return (
-    <form
-      className="flex flex-col justify-center p-2 rounded-full"
-      onSubmit={handleSubmit}
-    >
-      <input
-        className="m-2 md:m-4 h-11 w-72 outline-none text-lg bg-gray-200"
-        placeholder="First Name"
-        type="text"
-        name="firstName"
-        value={slot.firstName}
-        onChange={handleChange}
-      />
-      <input
-        className="m-2 md:m-4 h-11 w-72 outline-none text-lg bg-gray-200"
-        placeholder="Last Name"
-        type="text"
-        name="lastName"
-        value={slot.lastName}
-        onChange={handleChange}
-      />
-      <input
-        className="m-2 md:m-4 h-11 w-72 outline-none text-lg bg-gray-200"
-        placeholder="Phone No"
-        type="text"
-        name="phNo"
-        value={slot.phNo}
-        onChange={handleChange}
-      />
-      <div
-        className="m-2 md:m-4 p-2 rounded-full transition-gpu duration-200 hover:bg-gray-800"
-        onClick={handleSubmit}
+    <div className="flex justify-center">
+      <form
+        className="max-w-md flex flex-col justify-center p-2 rounded-full"
+        onSubmit={handleSubmit}
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-6 w-6"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path
-            fillRule="evenodd"
-            d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-            clipRule="evenodd"
-          />
-        </svg>
-      </div>
-    </form>
+        <input
+          className="m-2 p-2 rounded-lg md:m-4 h-11 w-72 outline-none text-lg transition-gpu duration-200 bg-gray-100 focus:ring-2 md:focus:ring-4  focus:ring-gray-200"
+          placeholder="First Name"
+          type="text"
+          name="firstName"
+          value={slot?.firstName}
+          onChange={handleChange}
+        />
+        <input
+          className="m-2 p-2 rounded-lg md:m-4 h-11 w-72 outline-none text-lg transition-gpu duration-200 bg-gray-100 focus:ring-2 md:focus:ring-4 focus:ring-gray-200"
+          placeholder="Last Name"
+          type="text"
+          name="lastName"
+          value={slot?.lastName}
+          onChange={handleChange}
+        />
+        <input
+          className="m-2 p-2 rounded-lg md:m-4 h-11 w-72 outline-none text-lg transition-gpu duration-200 bg-gray-100 focus:ring-2 md:focus:ring-4 focus:ring-gray-200"
+          placeholder="Phone No"
+          type="text"
+          name="phNo"
+          value={slot?.phNo}
+          onChange={handleChange}
+        />
+        {error && (
+          <p className="m-2 p-2 bg-red-400 rounded-lg text-white font-semibold">
+            Fields can't be empty!
+          </p>
+        )}
+        <input
+          className="m-2 p-2 py-2 px-4 bg-blue-600 text-white text-base md:text-lg font-medium text-center shadow-lg rounded-md md:rounded-lg transition duration-100 ease-in cursor-pointer hover:bg-blue-500  hover:shadow-xl active:bg-blue-700 active:shadow-md active:text-white"
+          type="submit"
+          value="Submit"
+          onClick={handleSubmit}
+        />
+      </form>
+    </div>
   );
 }
