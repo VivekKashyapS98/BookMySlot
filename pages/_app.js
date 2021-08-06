@@ -5,7 +5,7 @@ import { getSlots, initSlot } from "../utils/slots";
 import Layout from "../components/Layout";
 import { useRouter } from "next/router";
 
-function reducer(state, action, router) {
+function reducer(state, action) {
   console.log(action);
   switch (action.type) {
     case "UPDATE":
@@ -27,7 +27,7 @@ function reducer(state, action, router) {
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
-  const [state, dispatch] = useReducer((...args) => reducer(...args, router), {
+  const [state, dispatch] = useReducer(reducer, {
     slots: getSlots(router),
   });
 
@@ -35,12 +35,16 @@ function MyApp({ Component, pageProps }) {
     localStorage.setItem("slots", JSON.stringify(state.slots));
   }, [router.asPath]);
 
-  return (
-    <Layout>
-      <SlotContext.Provider value={{ state, dispatch }}>
-        <Component {...pageProps} />
-      </SlotContext.Provider>
-    </Layout>
-  );
+  if (router.isReady) {
+    return (
+      <Layout>
+        <SlotContext.Provider value={{ state, dispatch }}>
+          <Component {...pageProps} />
+        </SlotContext.Provider>
+      </Layout>
+    );
+  } else {
+    return <p>Loading...</p>;
+  }
 }
 export default MyApp;

@@ -10,9 +10,19 @@ export default function EditSlot(props) {
     setSlot((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  function isNumeric(str) {
+    if (typeof str != "string") return false;
+    return !isNaN(str) && !isNaN(parseFloat(str));
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (slot.firstName !== "" && slot.lastName !== "" && slot.phNo !== "") {
+    if (
+      slot.firstName !== "" &&
+      slot.lastName !== "" &&
+      slot.phNo !== "" &&
+      isNumeric(slot.phNo)
+    ) {
       dispatch({ type: "UPDATE", payload: { ...slot, booked: true } });
       props.router.push("/");
     } else {
@@ -51,11 +61,27 @@ export default function EditSlot(props) {
         />
         {error && (
           <p className="m-2 p-2 bg-red-400 rounded-lg text-white font-semibold">
-            Fields can't be empty!
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="inline-block h-6 w-6 mr-2"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            {slot.firstName === "" || slot.lastName === "" || slot.phNo === ""
+              ? "Fields can't be empty!"
+              : "Phone No. must be numeric!"}
           </p>
         )}
         <input
-          className="m-2 p-2 py-2 px-4 bg-blue-600 text-white text-base md:text-lg font-medium text-center shadow-lg rounded-md md:rounded-lg transition duration-100 ease-in cursor-pointer hover:bg-blue-500  hover:shadow-xl active:bg-blue-700 active:shadow-md active:text-white"
+          className="m-2 p-2 py-2 px-4 bg-blue-600 text-white text-base md:text-lg font-medium text-center shadow-lg rounded-md md:rounded-lg transition-gpu duration-100 ease-in cursor-pointer hover:bg-blue-500  hover:shadow-xl active:bg-blue-700 active:shadow-md active:text-white"
           type="submit"
           value="Submit"
           onClick={handleSubmit}
