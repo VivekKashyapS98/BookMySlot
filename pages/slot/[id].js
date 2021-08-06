@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useContext } from "react";
-import EditSlot from "../../components/EditSlot";
 import { SlotContext } from "../../utils/context";
 
 export default function ID() {

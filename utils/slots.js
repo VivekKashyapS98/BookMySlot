@@ -1,14 +1,3 @@
-export function getSlots(router) {
-  let slots = initSlot;
-
-  if (router.isReady) {
-    if (localStorage.getItem("slots")) {
-      slots = JSON.parse(localStorage.getItem("slots"));
-    }
-  }
-  return slots;
-}
-
 export const initSlot = [
   {
     id: 0,
@@ -83,3 +72,14 @@ export const initSlot = [
     booked: false,
   },
 ];
+
+export function getSlots(router) {
+  let slots = initSlot;
+
+  if (router.isReady) {
+    if (localStorage.getItem("slots")) {
+      slots = JSON.parse(localStorage.getItem("slots"));
+    }
+  }
+  return slots;
+}

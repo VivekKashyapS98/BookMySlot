@@ -2,12 +2,14 @@ import Head from "next/head";
 import { useContext } from "react";
 import Card from "../components/Card";
 import { SlotContext } from "../utils/context";
+import { initSlot } from "../utils/slots";
 
 export default function Home() {
   const { state, dispatch } = useContext(SlotContext);
 
   const clearSlots = () => {
     dispatch({ type: "CLEAR" });
+    localStorage.setItem("slots", JSON.stringify(initSlot));
   };
 
   return (
